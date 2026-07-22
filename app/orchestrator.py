@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import List
 
 from .agents import ANPRAgent, CrowdAgent, ImmersionPlannerAgent, PandalAgent, ResourceAgent, TrafficAgent
+from .ai import HybridAIAdvisor
 from .config import DEFAULT_CRANES, DEFAULT_GHATS
 from .ingestion import load_idol_records, load_pandal_records, load_procession_records, load_vehicle_records
 from .models import AgentReport, OrchestrationResult, ProcessionDecision
@@ -82,9 +83,12 @@ class DigitalTwinOrchestrator:
         reports.append(immersion_agent.report())
         reports.append(anpr_agent.summarize(vehicles[0], generator.anpr(vehicles[0].vehicle_number, step)))
 
+        advisor = HybridAIAdvisor.from_environment()
+        reports.append(advisor.summarize(decisions, reports))
+
         remaining = [f"{crane.crane_number}:{crane.hourly_capacity}" for crane in DEFAULT_CRANES]
         return OrchestrationResult(
-            generated_at=datetime.utcnow(),
+            generated_at=datetime.now(timezone.utc),
             decisions=decisions,
             agent_reports=reports,
             remaining_crane_capacity=remaining,

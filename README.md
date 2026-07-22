@@ -7,6 +7,7 @@ This version starts with an application layer instead of a dashboard. It combine
 - CSV-backed pandal registration data
 - Synthetic live data generators for crowd, traffic, ANPR, and weather
 - Independent agents for each operational concern
+- A hybrid AI advisor that turns the structured agent output into a short operational briefing
 - A coordinator that turns predictions into actionable recommendations
 
 ## What it does
@@ -53,3 +54,14 @@ The static registration layer expects these CSV files:
 - `data/vehicle_data.csv`
 
 Live observations are synthetic for now and are produced by the generator modules.
+
+## Hybrid AI layer
+
+The deterministic agents still make the safety decisions, but the final report now includes an AI advisory summary.
+
+To enable a remote LLM for that summary, set:
+
+- `OPENAI_API_KEY`
+- `OPENAI_MODEL` optional, defaults to `gpt-4o-mini`
+
+If those variables are not set, the app falls back to a local summary so the system keeps working offline.

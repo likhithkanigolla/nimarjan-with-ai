@@ -15,3 +15,4 @@ def test_orchestrator_produces_decisions() -> None:
     assert all(decision.route.route_name.startswith("Route") for decision in result.decisions)
     assert all(decision.immersion.crane_number in {1, 2, 3, 4} for decision in result.decisions)
     assert result.agent_reports
+    assert result.agent_reports[-1].agent_name == "ai-advisor"
