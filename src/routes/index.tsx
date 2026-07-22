@@ -1,24 +1,24 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Toaster } from "sonner";
+import { AppShell } from "@/components/AppShell";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "Digital Twin — Ganesh Nimarjan Operations" },
+      { name: "description", content: "Interactive Digital Twin prototype for crowd, procession, resource, and emergency management during Ganesh Nimarjan in Hyderabad." },
+      { property: "og:title", content: "Digital Twin — Ganesh Nimarjan Operations" },
+      { property: "og:description", content: "Interactive Digital Twin prototype: predict, simulate, recommend — with human approval." },
+    ],
+  }),
+  component: Home,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Home() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <>
+      <AppShell />
+      <Toaster position="top-right" theme="dark" richColors closeButton />
+    </>
   );
 }
