@@ -15,23 +15,35 @@ const makeIcon = (bg: string, glyph: string, ring = false) =>
     iconSize: [28, 28], iconAnchor: [14, 14], popupAnchor: [0, -14],
   });
 
+const makeImgIcon = (src: string, size = 32, label = "", ring = false, bg = "transparent") =>
+  L.divIcon({
+    html: `<div class="${ring ? "dt-pulse" : ""}" style="width:${size}px;height:${size}px;background:${bg};position:relative;display:flex;align-items:center;justify-content:center;${bg !== 'transparent' ? 'border-radius:50%;' : ''}">
+             <img src="/icons/${src}" style="width:100%;height:100%;object-fit:contain;" />
+             ${label ? `<div style="position:absolute;bottom:20%;font-size:11px;font-weight:bold;background:rgba(0,0,0,0.85);color:white;padding:2px 6px;border-radius:4px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.5);">${label}</div>` : ""}
+           </div>`,
+    className: "dt-icon-wrap",
+    iconSize: [size, size], iconAnchor: [size / 2, size / 2], popupAnchor: [0, -size / 2],
+  });
+
 const ICONS = {
-  ip:       (label: string) => makeIcon("var(--color-info)", label),
-  ipFocus:  (label: string) => makeIcon("var(--color-info)", label, true),
-  crane:    (bg: string) => makeIcon(bg, "🛠"),
+  ip:       (label: string) => makeImgIcon("hotspot.png", 160, label, false),
+  ipFocus:  (label: string) => makeImgIcon("hotspot.png", 180, label, true),
+  crane:    (bg: string) => makeImgIcon("crane.png", 28, "", false, bg),
   cameraC:  () => makeIcon("var(--color-predict)", "◉"),
   cameraCP: () => makeIcon("var(--color-predict)", "◉", true),
   cameraT:  () => makeIcon("#68a3ff", "◱"),
   hospital: () => makeIcon("var(--color-critical)", "＋"),
   police:   () => makeIcon("#5a7cff", "★"),
-  ambulance:() => makeIcon("var(--color-critical)", "🚑"),
+  ambulance:() => makeImgIcon("ambulance.png", 32, "", false, "var(--color-critical)"),
   procession:(color: string, label: string) =>
     L.divIcon({
       html: `<div style="display:flex;align-items:center;gap:6px;">
-        <div class="dt-marker" style="width:22px;height:22px;background:${color};color:white;font-size:11px;font-weight:700;">P</div>
+        <div class="dt-marker" style="width:28px;height:28px;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,0.2);">
+          <img src="/icons/truck.png" style="width:18px;height:18px;object-fit:contain;" />
+        </div>
         <div style="background:rgba(15,20,35,0.85);border:1px solid rgba(255,255,255,0.12);padding:2px 6px;border-radius:6px;font-size:10px;color:#e6ecff;white-space:nowrap;">${label}</div>
       </div>`,
-      className: "dt-icon-wrap", iconSize: [80, 24], iconAnchor: [11, 12],
+      className: "dt-icon-wrap", iconSize: [80, 28], iconAnchor: [14, 14],
     }),
   emergency: (label: string) =>
     L.divIcon({
@@ -50,7 +62,7 @@ function CameraFly({ center, zoom }: { center?: LatLng; zoom?: number }) {
 }
 
 // ------- Moving entity marker with interpolated position -------
-function MovingEntityMarker({ path, color, label }: { path: LatLng[]; color: string; label: string }) {
+function MovingEntityMarker({ path, color, label, kind }: { path: LatLng[]; color: string; label: string; kind?: string }) {
   const [t, setT] = useState(0);
   const raf = useRef<number>(0);
   useEffect(() => {
@@ -58,7 +70,7 @@ function MovingEntityMarker({ path, color, label }: { path: LatLng[]; color: str
     const start = performance.now();
     const dur = 4200;
     const tick = (now: number) => {
-      const k = Math.min(1, (now - start) / dur);
+      const k = Math.max(0, Math.min(1, (now - start) / dur));
       setT(k);
       if (k < 1) raf.current = requestAnimationFrame(tick);
     };
@@ -77,7 +89,7 @@ function MovingEntityMarker({ path, color, label }: { path: LatLng[]; color: str
   }, [t, path]);
 
   return (
-    <Marker position={pos as any} icon={ICONS.procession(color, label)} />
+    <Marker position={pos as any} icon={kind === "ambulance" ? ICONS.ambulance() : ICONS.procession(color, label)} />
   );
 }
 
@@ -247,7 +259,7 @@ export default function DigitalTwinMap() {
 
         {/* Moving entities */}
         {currentStep?.moving?.map((m) => (
-          <MovingEntityMarker key={m.id + JSON.stringify(m.path)} path={m.path} color={m.color ?? "#6ea3ff"} label={m.label} />
+          <MovingEntityMarker key={m.id + JSON.stringify(m.path)} path={m.path} color={m.color ?? "#6ea3ff"} label={m.label} kind={m.kind} />
         ))}
       </MapContainer>
 

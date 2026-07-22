@@ -39,7 +39,7 @@ type Action =
 const initial: State = {
   view: "introduction",
   role: "Command Center",
-  presenterMode: true,
+  presenterMode: false,
   scenarioId: null,
   stepIndex: 0,
   approvals: {},
@@ -122,8 +122,8 @@ export function AppProvider({ children }: { children: ReactNode }) {
     currentStep.alerts?.forEach((a) => {
       const fn = a.severity === "CRITICAL" ? toast.error
         : a.severity === "WARNING" ? toast.warning
-        : a.severity === "ADVISORY" ? toast.message
-        : toast.info;
+          : a.severity === "ADVISORY" ? toast.message
+            : toast.info;
       fn(a.text, { description: `${currentScenario.name} · Step ${currentStep.id}` });
       dispatch({ type: "AUDIT", text: `[${a.severity}] ${a.text}` });
     });

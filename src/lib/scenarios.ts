@@ -481,8 +481,11 @@ export const scenario3: Scenario = {
     {
       id: 1, title: "Digital Immersion Pass Registered", stage: "OBSERVE",
       cue: "The pass carries pandal + idol + procession + vehicle context.",
-      mapCenter: [17.4260, 78.4400], mapZoom: 12,
+      mapCenter: [17.4260, 78.4400], mapZoom: 14,
       layers: { immersion: true, cranes: true, routes: true, processions: true },
+      processions: [
+        { id: "P-142", label: "GNI-2026-0142", kind: "procession", path: [[17.4260, 78.4400], [17.4240, 78.4500]], progress: 0, color: "var(--color-info)" }
+      ],
       focusIds: ["IP-01","IP-02","IP-03","IP-04","IP-05"],
       kpis: [
         { label: "Pass", value: "GNI-2026-0142", tone: "info" },
@@ -503,8 +506,11 @@ export const scenario3: Scenario = {
     {
       id: 2, title: "Multi-constraint Suitability Analysis", stage: "SIMULATE",
       cue: "IP-03 is closest but cranes can't lift 2,200 kg × 16 ft. Distance ≠ suitability.",
-      mapCenter: [17.4260, 78.4500], mapZoom: 12,
-      layers: { immersion: true, cranes: true, routes: true },
+      mapCenter: [17.4260, 78.4500], mapZoom: 14,
+      layers: { immersion: true, cranes: true, routes: true, processions: true },
+      processions: [
+        { id: "P-142", label: "GNI-2026-0142", kind: "procession", path: [[17.4260, 78.4400], [17.4240, 78.4500]], progress: 0.2, color: "var(--color-info)" }
+      ],
       activeRoutes: [{ id: "R6", style: "alt" }],
       focusIds: ["IP-01","IP-02","IP-03"],
       kpis: [
@@ -525,8 +531,11 @@ export const scenario3: Scenario = {
     {
       id: 3, title: "Initial Allocation — IP-02 / CR-07", stage: "RECOMMEND",
       cue: "Explain WHY this decision: dimensions × crane × queue × crowd × traffic.",
-      mapCenter: [17.4230, 78.4600], mapZoom: 13,
+      mapCenter: [17.4230, 78.4600], mapZoom: 14,
       layers: { immersion: true, cranes: true, routes: true, processions: true },
+      processions: [
+        { id: "P-142", label: "GNI-2026-0142", kind: "procession", path: [[17.4260, 78.4400], [17.4240, 78.4500]], progress: 0.5, color: "var(--color-info)" }
+      ],
       activeRoutes: [{ id: "R6", style: "selected" }],
       focusIds: ["IP-02"],
       kpis: [
@@ -555,6 +564,9 @@ export const scenario3: Scenario = {
       cue: "A crane fault cascades to queue → traffic → crowd.",
       mapCenter: IP02, mapZoom: 14,
       layers: { immersion: true, cranes: true, routes: true, processions: true, predictions: true },
+      processions: [
+        { id: "P-142", label: "GNI-2026-0142", kind: "procession", path: [[17.4260, 78.4400], [17.4240, 78.4500]], progress: 0.8, color: "var(--color-warn)" }
+      ],
       heatZones: [{ center: IP02, radius: 380, level: "risk", predicted: true, label: "Predicted spillback +HIGH" }],
       focusIds: ["IP-02"],
       kpis: [
@@ -582,8 +594,11 @@ export const scenario3: Scenario = {
     {
       id: 5, title: "Re-simulation of Alternatives", stage: "SIMULATE",
       cue: "Compare keep / delay / reallocate.",
-      mapCenter: [17.4310, 78.4300], mapZoom: 12,
-      layers: { immersion: true, cranes: true, routes: true, predictions: true },
+      mapCenter: [17.4310, 78.4300], mapZoom: 14,
+      layers: { immersion: true, cranes: true, routes: true, predictions: true, processions: true },
+      processions: [
+        { id: "P-142", label: "GNI-2026-0142", kind: "procession", path: [[17.4240, 78.4500], [17.4300, 78.4600]], progress: 0.2, color: "var(--color-info)" }
+      ],
       activeRoutes: [{ id: "R6", style: "faded" }, { id: "R7", style: "alt" }],
       focusIds: ["IP-02","IP-05"],
       kpis: [
@@ -605,6 +620,9 @@ export const scenario3: Scenario = {
       cue: "The Digital Immersion Pass is dynamic — it adapts to the real system state.",
       mapCenter: [17.4310, 78.4200], mapZoom: 12,
       layers: { immersion: true, cranes: true, routes: true, processions: true, predictions: true },
+      processions: [
+        { id: "P-142", label: "GNI-2026-0142 (Rerouted to IP-05)", kind: "procession", path: [[17.4240, 78.4500], [17.4340, 78.4600]], progress: 0.9, color: "var(--color-safe)" }
+      ],
       activeRoutes: [{ id: "R6", style: "faded" }, { id: "R7", style: "selected" }],
       moving: [{
         id: "P-142", label: "Procession GNI-0142 · rerouted",

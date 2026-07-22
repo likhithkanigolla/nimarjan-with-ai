@@ -4,8 +4,7 @@ import { useApp } from "@/lib/store";
 import { RoleSelector } from "./RoleSelector";
 
 export function Header() {
-  const { simTime, presenterMode, dispatch } = useApp();
-
+  const { simTime, dispatch } = useApp();
   return (
     <header className="glass flex h-14 items-center justify-between px-4 border-b border-[var(--panel-border)] relative z-30">
       <div className="flex items-center gap-3">
@@ -42,13 +41,6 @@ export function Header() {
             animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.6, repeat: Infinity }}
           />
         </span>
-        <button
-          onClick={() => dispatch({ type: "TOGGLE_PRESENTER" })}
-          className={`chip cursor-pointer ${presenterMode ? "text-[var(--color-warn)]" : ""}`}
-          title="Toggle presenter cues"
-        >
-          Presenter Mode: {presenterMode ? "ON" : "OFF"}
-        </button>
         <RoleSelector />
       </div>
     </header>

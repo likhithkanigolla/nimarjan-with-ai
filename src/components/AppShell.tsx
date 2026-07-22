@@ -1,4 +1,4 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { AppProvider, useApp } from "@/lib/store";
 import { Header } from "@/components/Header";
@@ -13,11 +13,13 @@ import { AuditLog } from "@/components/AuditLog";
 import { DigitalPass } from "@/components/DigitalPass";
 import { ClosingOverview } from "@/components/ClosingOverview";
 import { ClientOnly } from "@/components/ClientOnly";
+import { FileBadge, EyeOff } from "lucide-react";
 
 const DigitalTwinMap = lazy(() => import("@/components/DigitalTwinMap"));
 
 function ScenarioWorkspace() {
-  const { currentScenario } = useApp();
+  const { currentScenario, role } = useApp();
+  const [showPass, setShowPass] = useState(false);
   if (!currentScenario) return null;
 
   return (
@@ -32,7 +34,7 @@ function ScenarioWorkspace() {
         <ScenarioControls />
       </div>
 
-      <ScenarioTimeline />
+      {/* <ScenarioTimeline /> */}
       <KPIGrid />
 
       <div className="flex-1 min-h-0 flex gap-3">
@@ -42,20 +44,54 @@ function ScenarioWorkspace() {
               <DigitalTwinMap />
             </Suspense>
           </ClientOnly>
-          <div className="flex items-end justify-between gap-3">
-            <PresenterCue />
-            {currentScenario.id === "scenario3" && <div className="min-w-[340px] max-w-[380px]"><DigitalPass /></div>}
+          <div className="flex items-end justify-between gap-3 absolute bottom-4 left-4 z-[400] right-4 pointer-events-none">
+            <div className="pointer-events-auto">
+              <PresenterCue />
+            </div>
+            {currentScenario.id === "scenario3" && (
+              <div className="flex flex-col items-end gap-2 pointer-events-auto">
+                <button
+                  onClick={() => setShowPass(!showPass)}
+                  className="bg-[var(--card)] border border-[var(--panel-border)] shadow-lg px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 hover:bg-[var(--card-hover)] transition-colors"
+                >
+                  <FileBadge className="w-4 h-4 text-[var(--color-info)]" />
+                  {showPass ? "Hide Pass" : "View Digital Pass"}
+                </button>
+                <AnimatePresence>
+                  {showPass && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 10, scale: 0.95 }}
+                      className="min-w-[340px] max-w-[380px]"
+                    >
+                      <DigitalPass />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            )}
           </div>
         </div>
 
-        <div className="w-[360px] shrink-0 flex flex-col gap-3 min-h-0">
-          <div className="flex-1 min-h-0 flex flex-col gap-3">
-            <DigitalTwinDecisionPanel />
+        {role !== "Viewer" ? (
+          <div className="w-[360px] shrink-0 flex flex-col gap-3 min-h-0 relative z-[400]">
+            <div className="flex-1 min-h-0 flex flex-col gap-3">
+              <DigitalTwinDecisionPanel />
+            </div>
+            <div className="h-[160px] shrink-0">
+              <AuditLog />
+            </div>
           </div>
-          <div className="h-[160px] shrink-0">
-            <AuditLog />
+        ) : (
+          <div className="w-[360px] shrink-0 flex flex-col gap-3 min-h-0 relative z-[400]">
+            <div className="glass rounded-lg flex-1 flex flex-col items-center justify-center text-center p-6 text-muted-foreground border border-[var(--panel-border)]">
+              <EyeOff className="w-10 h-10 mb-4 opacity-50" />
+              <h3 className="text-sm font-semibold text-foreground mb-1">Viewer Mode</h3>
+              <p className="text-xs">Your current role has read-only access. Decision controls and logs are hidden.</p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
