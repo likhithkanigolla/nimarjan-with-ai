@@ -4,6 +4,7 @@ import { AppProvider, useApp } from "@/lib/store";
 import { Header } from "@/components/Header";
 import { SidebarNavigation } from "@/components/SidebarNavigation";
 import { SlideViewer } from "@/components/SlideViewer";
+import { AgenticApplicationOverview } from "@/components/AgenticApplicationOverview";
 import { ScenarioControls } from "@/components/ScenarioControls";
 import { ScenarioTimeline } from "@/components/ScenarioTimeline";
 import { DigitalTwinDecisionPanel } from "@/components/DigitalTwinDecisionPanel";
@@ -39,8 +40,20 @@ function ScenarioWorkspace() {
 
       <div className="flex-1 min-h-0 flex gap-3">
         <div className="flex-1 min-w-0 flex flex-col gap-3">
-          <ClientOnly fallback={<div className="flex-1 rounded-lg border border-[var(--panel-border)] grid place-items-center text-muted-foreground">Loading map…</div>}>
-            <Suspense fallback={<div className="flex-1 rounded-lg border border-[var(--panel-border)] grid place-items-center text-muted-foreground">Loading map…</div>}>
+          <ClientOnly
+            fallback={
+              <div className="flex-1 rounded-lg border border-[var(--panel-border)] grid place-items-center text-muted-foreground">
+                Loading map…
+              </div>
+            }
+          >
+            <Suspense
+              fallback={
+                <div className="flex-1 rounded-lg border border-[var(--panel-border)] grid place-items-center text-muted-foreground">
+                  Loading map…
+                </div>
+              }
+            >
               <DigitalTwinMap />
             </Suspense>
           </ClientOnly>
@@ -88,7 +101,9 @@ function ScenarioWorkspace() {
             <div className="glass rounded-lg flex-1 flex flex-col items-center justify-center text-center p-6 text-muted-foreground border border-[var(--panel-border)]">
               <EyeOff className="w-10 h-10 mb-4 opacity-50" />
               <h3 className="text-sm font-semibold text-foreground mb-1">Viewer Mode</h3>
-              <p className="text-xs">Your current role has read-only access. Decision controls and logs are hidden.</p>
+              <p className="text-xs">
+                Your current role has read-only access. Decision controls and logs are hidden.
+              </p>
             </div>
           </div>
         )}
@@ -103,14 +118,17 @@ function ViewSwitcher() {
     <AnimatePresence mode="wait">
       <motion.div
         key={view}
-        initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0 }}
         transition={{ duration: 0.25 }}
         className="flex-1 flex flex-col min-h-0"
       >
+        {view === "application" && <AgenticApplicationOverview />}
         {view === "team" && (
           <SlideViewer
             title="Team"
-            subtitle="Ideathon Team · Digital Twin for Crowd & Event Management"
+            subtitle="Team presentation · Agentic AI platform for event operations"
             imageSrc="/slides/team-placeholder.jpg"
             bullets={[
               "Moderator + 4 team members",
@@ -119,24 +137,13 @@ function ViewSwitcher() {
             ]}
           />
         )}
-        {view === "introduction" && (
-          <SlideViewer
-            title="Introduction"
-            subtitle="Why Ganesh Nimarjan operations need a Digital Twin"
-            imageSrc="/slides/introduction-placeholder.jpg"
-            bullets={[
-              "Hyderabad — hundreds of pandals, dozens of immersion points, millions on the streets",
-              "Crowd, traffic, resources, and emergency response are handled by different agencies today",
-              "Reactive management leads to cascading failures during peak windows",
-              "This prototype demonstrates a Digital Twin that predicts, simulates, recommends — with human approval",
-            ]}
-          />
+        {(view === "scenario1" || view === "scenario2" || view === "scenario3") && (
+          <ScenarioWorkspace />
         )}
-        {(view === "scenario1" || view === "scenario2" || view === "scenario3") && <ScenarioWorkspace />}
         {view === "future" && (
           <SlideViewer
             title="Future Work"
-            subtitle="From prototype to production-grade Digital Twin"
+            subtitle="From prototype to production-grade agentic AI platform"
             imageSrc="/slides/future-work-placeholder.jpg"
             bullets={[
               "AI prediction agent (crowd density, arrival forecasting)",

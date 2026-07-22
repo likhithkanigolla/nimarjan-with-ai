@@ -1,22 +1,31 @@
-// Slide viewer for Team / Introduction / Future / Closing placeholders.
+// Slide viewer for Team / Future / Closing placeholders.
 import { motion } from "framer-motion";
 import { ImageIcon } from "lucide-react";
 
 export function SlideViewer({
-  title, subtitle, imageSrc, bullets,
+  title,
+  subtitle,
+  imageSrc,
+  bullets,
 }: {
-  title: string; subtitle?: string; imageSrc?: string; bullets?: string[];
+  title: string;
+  subtitle?: string;
+  imageSrc?: string;
+  bullets?: string[];
 }) {
   return (
     <div className="flex-1 relative overflow-hidden">
       <motion.div
         key={title}
-        initial={{ opacity: 0, scale: 0.985 }} animate={{ opacity: 1, scale: 1 }}
+        initial={{ opacity: 0, scale: 0.985 }}
+        animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.35 }}
         className="h-full w-full grid grid-rows-[auto_1fr] p-6 gap-4"
       >
         <div>
-          <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Presentation Slide</div>
+          <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
+            Presentation Slide
+          </div>
           <h1 className="text-3xl font-semibold mt-1">{title}</h1>
           {subtitle && <p className="text-muted-foreground mt-1 max-w-3xl">{subtitle}</p>}
         </div>
@@ -25,7 +34,8 @@ export function SlideViewer({
           <div className="relative rounded-lg border border-[var(--panel-border)] bg-black/30 overflow-hidden grid place-items-center">
             {imageSrc ? (
               <img
-                src={imageSrc} alt={title}
+                src={imageSrc}
+                alt={title}
                 className="w-full h-full object-contain"
                 onError={(e) => ((e.currentTarget as HTMLImageElement).style.display = "none")}
               />
@@ -34,7 +44,9 @@ export function SlideViewer({
               <div className="text-center opacity-60">
                 <ImageIcon className="w-10 h-10 mx-auto" />
                 <div className="mt-2 text-sm">Replace with presentation image</div>
-                <div className="text-[11px] font-mono mt-1">/public/slides/{title.toLowerCase().replace(/\W+/g,"-")}.jpg</div>
+                <div className="text-[11px] font-mono mt-1">
+                  /public/slides/{title.toLowerCase().replace(/\W+/g, "-")}.jpg
+                </div>
               </div>
             </div>
           </div>
@@ -43,7 +55,8 @@ export function SlideViewer({
             {bullets?.map((b, i) => (
               <motion.div
                 key={i}
-                initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }}
+                initial={{ opacity: 0, x: 12 }}
+                animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 + i * 0.08 }}
                 className="flex gap-3 items-start"
               >

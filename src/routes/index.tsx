@@ -5,10 +5,18 @@ import { AppShell } from "@/components/AppShell";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Digital Twin — Ganesh Nimarjan Operations" },
-      { name: "description", content: "Interactive Digital Twin prototype for crowd, procession, resource, and emergency management during Ganesh Nimarjan in Hyderabad." },
-      { property: "og:title", content: "Digital Twin — Ganesh Nimarjan Operations" },
-      { property: "og:description", content: "Interactive Digital Twin prototype: predict, simulate, recommend — with human approval." },
+      { title: "Digital Twin for Event Operations" },
+      {
+        name: "description",
+        content:
+          "Agentic AI application for event operations, using registration data, synthetic live feeds, prediction, and decision support.",
+      },
+      { property: "og:title", content: "Digital Twin for Event Operations" },
+      {
+        property: "og:description",
+        content:
+          "Agentic AI platform for crowd prediction, traffic routing, and immersion planning.",
+      },
     ],
   }),
   component: Home,
