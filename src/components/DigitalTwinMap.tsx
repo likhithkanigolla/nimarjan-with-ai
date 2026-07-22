@@ -60,6 +60,35 @@ const ICONS = {
     }),
 };
 
+// ------- OSRM Routing with Local Cache -------
+const osrmCache = new Map<string, LatLng[]>();
+
+async function fetchOSRMRoute(coordinates: LatLng[]): Promise<LatLng[]> {
+  if (coordinates.length < 2) return coordinates;
+  
+  const cacheKey = JSON.stringify(coordinates);
+  if (osrmCache.has(cacheKey)) {
+    return osrmCache.get(cacheKey)!;
+  }
+  
+  try {
+    const coordString = coordinates.map(c => `${c[1]},${c[0]}`).join(';');
+    const url = `https://router.project-osrm.org/route/v1/driving/${coordString}?overview=full&geometries=geojson`;
+    const res = await fetch(url);
+    if (!res.ok) throw new Error("OSRM request failed");
+    const data = await res.json();
+    if (data.routes && data.routes[0]) {
+      const routeCoords: [number, number][] = data.routes[0].geometry.coordinates;
+      const result = routeCoords.map(c => [c[1], c[0]] as LatLng);
+      osrmCache.set(cacheKey, result);
+      return result;
+    }
+  } catch (e) {
+    console.error("OSRM Routing failed, falling back to straight lines", e);
+  }
+  return coordinates;
+}
+
 // ------- Map camera controller -------
 function CameraFly({ center, zoom }: { center?: LatLng; zoom?: number }) {
   const map = useMap();
@@ -144,6 +173,62 @@ export default function DigitalTwinMap() {
   const cranes = dataService.syncCranes();
   const allRoutes = dataService.syncRoutes();
 
+  const [enrichedRoutes, setEnrichedRoutes] = useState<Record<string, LatLng[]>>({});
+  const [enrichedMoving, setEnrichedMoving] = useState<Record<string, LatLng[]>>({});
+
+  useEffect(() => {
+    const fetchAll = async () => {
+      const promises = allRoutes.map(async (r) => {
+        const detailed = await fetchOSRMRoute(r.coordinates);
+        return { id: r.id, coordinates: detailed };
+      });
+      const results = await Promise.all(promises);
+      const newMap: Record<string, LatLng[]> = {};
+      results.forEach((res) => {
+        newMap[res.id] = res.coordinates;
+      });
+      setEnrichedRoutes(newMap);
+    };
+    fetchAll();
+  }, [allRoutes]);
+
+  const activeMoving = useMemo(() => {
+    const list: any[] = [...(currentStep?.moving || [])];
+    const stepAny = currentStep as any;
+    if (stepAny?.processions) {
+      stepAny.processions.forEach((p: any) => {
+        if (!list.some((existing) => existing.id === p.id)) {
+          list.push({
+            id: p.id,
+            label: p.label,
+            kind: p.kind || "procession",
+            path: p.path,
+            progress: p.progress || 0,
+            color: p.color,
+          });
+        }
+      });
+    }
+    return list;
+  }, [currentStep?.moving, (currentStep as any)?.processions]);
+
+  useEffect(() => {
+    if (activeMoving.length === 0) return;
+    const fetchMoving = async () => {
+      const promises = activeMoving.map(async (m) => {
+        const detailed = await fetchOSRMRoute(m.path);
+        return { id: m.id, path: detailed };
+      });
+      const results = await Promise.all(promises);
+      const newMap: Record<string, LatLng[]> = {};
+      results.forEach((res) => {
+        newMap[res.id] = res.path;
+      });
+      setEnrichedMoving(newMap);
+    };
+    fetchMoving();
+  }, [currentStep?.moving, (currentStep as any)?.processions]);
+
   const layers = currentStep?.layers ?? {
     immersion: true,
     cameras: true,
@@ -208,22 +293,26 @@ export default function DigitalTwinMap() {
 
         {/* Routes */}
         {showAllRoutes &&
-          allRoutes.map((r) => (
-            <Polyline
-              key={r.id}
-              positions={r.coordinates as any}
-              pathOptions={{ color: "#4d6ba0", weight: 2, opacity: 0.35 }}
-            />
-          ))}
+          allRoutes.map((r) => {
+            const coords = enrichedRoutes[r.id] || r.coordinates;
+            return (
+              <Polyline
+                key={r.id}
+                positions={coords as any}
+                pathOptions={{ color: "#4d6ba0", weight: 2, opacity: 0.35 }}
+              />
+            );
+          })}
         {!showAllRoutes &&
           allRoutes.map((r) => {
             const style = activeRouteMap.get(r.id);
             if (!style) return null;
             const s = routeStyles[style];
+            const coords = enrichedRoutes[r.id] || r.coordinates;
             return (
               <Polyline
                 key={r.id + style}
-                positions={r.coordinates as any}
+                positions={coords as any}
                 pathOptions={{
                   color: s.color,
                   weight: s.weight,
@@ -351,15 +440,18 @@ export default function DigitalTwinMap() {
         ))}
 
         {/* Moving entities */}
-        {currentStep?.moving?.map((m) => (
-          <MovingEntityMarker
-            key={m.id + JSON.stringify(m.path)}
-            path={m.path}
-            color={m.color ?? "#6ea3ff"}
-            label={m.label}
-            kind={m.kind}
-          />
-        ))}
+        {activeMoving.map((m) => {
+          const path = enrichedMoving[m.id] || m.path;
+          return (
+            <MovingEntityMarker
+              key={m.id + "_" + path.length}
+              path={path}
+              color={m.color ?? "#6ea3ff"}
+              label={m.label}
+              kind={m.kind}
+            />
+          );
+        })}
       </MapContainer>
 
       {/* Legend overlay */}

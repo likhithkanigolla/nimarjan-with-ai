@@ -49,6 +49,18 @@ type Action =
   | { type: "AUDIT"; text: string }
   | { type: "SET_INITIALIZING"; value: boolean };
 
+function generateUUID() {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  // Safe fallback for non-secure contexts (HTTP) or older browsers
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 const initial: State = {
   view: "application",
   role: "Command Center",
@@ -59,7 +71,7 @@ const initial: State = {
   autoPlay: false,
   audit: [
     {
-      id: crypto.randomUUID(),
+      id: "initial-audit-entry",
       time: "20:30",
       text: "Agentic AI platform initialized · demo data loaded",
     },
@@ -101,7 +113,7 @@ function reduce(state: State, action: Action): State {
       });
       return {
         ...state,
-        audit: [{ id: crypto.randomUUID(), time, text: action.text }, ...state.audit].slice(0, 50),
+        audit: [{ id: generateUUID(), time, text: action.text }, ...state.audit].slice(0, 50),
       };
     }
     case "SET_INITIALIZING":
