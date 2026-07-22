@@ -1,15 +1,26 @@
+/* eslint-disable react-refresh/only-export-components */
 // Global app state — role, view, scenario controller, audit log, alerts.
-import { createContext, useContext, useEffect, useMemo, useReducer, useRef, type ReactNode } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useReducer,
+  useRef,
+  type ReactNode,
+} from "react";
 import { toast } from "sonner";
 import { scenarios, type Scenario } from "@/lib/scenarios";
 import type { Role } from "@/lib/types";
 
 export type ViewKey =
-  | "team" | "introduction"
-  | "scenario1" | "scenario2" | "scenario3"
-  | "future" | "closing";
+  "application" | "team" | "scenario1" | "scenario2" | "scenario3" | "future" | "closing";
 
-export interface AuditEntry { id: string; time: string; text: string; }
+export interface AuditEntry {
+  id: string;
+  time: string;
+  text: string;
+}
 
 interface State {
   view: ViewKey;
@@ -30,21 +41,29 @@ type Action =
   | { type: "TOGGLE_PRESENTER" }
   | { type: "START_SCENARIO"; id: Scenario["id"] }
   | { type: "SET_STEP"; index: number }
-  | { type: "NEXT" } | { type: "PREV" } | { type: "RESET" }
+  | { type: "NEXT" }
+  | { type: "PREV" }
+  | { type: "RESET" }
   | { type: "APPROVE"; approvalId: string }
   | { type: "SET_AUTOPLAY"; value: boolean }
   | { type: "AUDIT"; text: string }
   | { type: "SET_INITIALIZING"; value: boolean };
 
 const initial: State = {
-  view: "introduction",
+  view: "application",
   role: "Command Center",
   presenterMode: false,
   scenarioId: null,
   stepIndex: 0,
   approvals: {},
   autoPlay: false,
-  audit: [{ id: crypto.randomUUID(), time: "20:30", text: "Digital Twin initialized · demo data loaded" }],
+  audit: [
+    {
+      id: crypto.randomUUID(),
+      time: "20:30",
+      text: "Agentic AI platform initialized · demo data loaded",
+    },
+  ],
   simTime: "20:30",
   initializing: false,
 };
@@ -75,12 +94,20 @@ function reduce(state: State, action: Action): State {
     case "SET_AUTOPLAY":
       return { ...state, autoPlay: action.value };
     case "AUDIT": {
-      const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false });
-      return { ...state, audit: [{ id: crypto.randomUUID(), time, text: action.text }, ...state.audit].slice(0, 50) };
+      const time = new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+      });
+      return {
+        ...state,
+        audit: [{ id: crypto.randomUUID(), time, text: action.text }, ...state.audit].slice(0, 50),
+      };
     }
     case "SET_INITIALIZING":
       return { ...state, initializing: action.value };
-    default: return state;
+    default:
+      return state;
   }
 }
 
@@ -106,10 +133,15 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (timer.current) clearTimeout(timer.current);
     if (state.autoPlay && currentScenario) {
       const isLast = state.stepIndex >= currentScenario.steps.length - 1;
-      if (isLast) { dispatch({ type: "SET_AUTOPLAY", value: false }); return; }
+      if (isLast) {
+        dispatch({ type: "SET_AUTOPLAY", value: false });
+        return;
+      }
       timer.current = setTimeout(() => dispatch({ type: "NEXT" }), 4200);
     }
-    return () => { if (timer.current) clearTimeout(timer.current); };
+    return () => {
+      if (timer.current) clearTimeout(timer.current);
+    };
   }, [state.autoPlay, state.stepIndex, currentScenario]);
 
   // Emit alerts + audit on step change
@@ -120,14 +152,20 @@ export function AppProvider({ children }: { children: ReactNode }) {
     if (lastAudit.current === stamp) return;
     lastAudit.current = stamp;
     currentStep.alerts?.forEach((a) => {
-      const fn = a.severity === "CRITICAL" ? toast.error
-        : a.severity === "WARNING" ? toast.warning
-          : a.severity === "ADVISORY" ? toast.message
-            : toast.info;
+      const fn =
+        a.severity === "CRITICAL"
+          ? toast.error
+          : a.severity === "WARNING"
+            ? toast.warning
+            : a.severity === "ADVISORY"
+              ? toast.message
+              : toast.info;
       fn(a.text, { description: `${currentScenario.name} · Step ${currentStep.id}` });
       dispatch({ type: "AUDIT", text: `[${a.severity}] ${a.text}` });
     });
-    currentStep.timeline?.forEach((t) => dispatch({ type: "AUDIT", text: `${t.time} — ${t.text}` }));
+    currentStep.timeline?.forEach((t) =>
+      dispatch({ type: "AUDIT", text: `${t.time} — ${t.text}` }),
+    );
   }, [currentStep, currentScenario]);
 
   // Initializing pulse when entering a scenario
@@ -138,26 +176,29 @@ export function AppProvider({ children }: { children: ReactNode }) {
     return () => clearTimeout(id);
   }, [state.scenarioId]);
 
-  const value = useMemo<Ctx>(() => ({
-    ...state,
-    dispatch,
-    currentScenario,
-    currentStep,
-    goToView: (v) => {
-      if (v === "scenario1" || v === "scenario2" || v === "scenario3") {
-        dispatch({ type: "START_SCENARIO", id: v });
-        dispatch({ type: "AUDIT", text: `Presenter opened ${scenarios[v].name}` });
-      } else {
-        dispatch({ type: "SET_VIEW", view: v });
-      }
-    },
-    approve: (id) => {
-      dispatch({ type: "APPROVE", approvalId: id });
-      dispatch({ type: "AUDIT", text: `Approval registered for ${id} by ${state.role}` });
-      toast.success(`${id} approved by ${state.role}`);
-      setTimeout(() => dispatch({ type: "NEXT" }), 400);
-    },
-  }), [state, currentScenario, currentStep]);
+  const value = useMemo<Ctx>(
+    () => ({
+      ...state,
+      dispatch,
+      currentScenario,
+      currentStep,
+      goToView: (v) => {
+        if (v === "scenario1" || v === "scenario2" || v === "scenario3") {
+          dispatch({ type: "START_SCENARIO", id: v });
+          dispatch({ type: "AUDIT", text: `Presenter opened ${scenarios[v].name}` });
+        } else {
+          dispatch({ type: "SET_VIEW", view: v });
+        }
+      },
+      approve: (id) => {
+        dispatch({ type: "APPROVE", approvalId: id });
+        dispatch({ type: "AUDIT", text: `Approval registered for ${id} by ${state.role}` });
+        toast.success(`${id} approved by ${state.role}`);
+        setTimeout(() => dispatch({ type: "NEXT" }), 400);
+      },
+    }),
+    [state, currentScenario, currentStep],
+  );
 
   return <AppCtx.Provider value={value}>{children}</AppCtx.Provider>;
 }

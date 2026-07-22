@@ -3,10 +3,18 @@ from __future__ import annotations
 from pathlib import Path
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from .orchestrator import DigitalTwinOrchestrator
 
 app = FastAPI(title="Agentic AI Crowd Management", version="0.1.0")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.get("/health")
@@ -14,7 +22,7 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.get("/simulate")
+@app.get("/api/orchestrator")
 def simulate(step: int = 0) -> dict:
     base_dir = Path(__file__).resolve().parent.parent
     orchestrator = DigitalTwinOrchestrator(data_dir=base_dir / "data")
@@ -39,3 +47,8 @@ def simulate(step: int = 0) -> dict:
         "agent_reports": [report.__dict__ for report in result.agent_reports],
         "remaining_crane_capacity": result.remaining_crane_capacity,
     }
+
+
+@app.get("/simulate")
+def legacy_simulate(step: int = 0) -> dict:
+    return simulate(step=step)
