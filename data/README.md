@@ -1,1 +1,0 @@
-Final schema with requested column changes.

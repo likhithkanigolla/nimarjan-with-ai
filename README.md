@@ -61,7 +61,7 @@ The deterministic agents still make the safety decisions, but the final report n
 
 To enable a remote LLM for that summary, set:
 
-- `OPENAI_API_KEY`
-- `OPENAI_MODEL` optional, defaults to `gpt-4o-mini`
+- `GEMINI_API_KEY`
+- `GEMINI_MODEL` optional, defaults to `gemini-3.5-flash-lite`
 
 If those variables are not set, the app falls back to a local summary so the system keeps working offline.

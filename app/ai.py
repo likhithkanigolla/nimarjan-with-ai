@@ -13,15 +13,15 @@ from .models import AgentReport, ProcessionDecision
 @dataclass
 class HybridAIAdvisor:
     api_key: str | None = None
-    model: str = "gpt-4o-mini"
-    endpoint: str = "https://api.openai.com/v1/chat/completions"
+    model: str = "gemini-3.5-flash-lite"
+    endpoint: str = "https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
     timeout_seconds: float = 12.0
 
     @classmethod
     def from_environment(cls) -> "HybridAIAdvisor":
         return cls(
-            api_key=os.getenv("OPENAI_API_KEY"),
-            model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"),
+            api_key=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"),
+            model=os.getenv("GEMINI_MODEL", "gemini-3.5-flash-lite"),
         )
 
     def summarize(self, decisions: Sequence[ProcessionDecision], reports: Sequence[AgentReport]) -> AgentReport:
@@ -52,20 +52,29 @@ class HybridAIAdvisor:
 
         body = json.dumps(
             {
-                "model": self.model,
-                "messages": [
-                    {"role": "system", "content": "You write concise operational summaries for crowd safety teams."},
-                    {"role": "user", "content": prompt},
+                "contents": [
+                    {
+                        "role": "user",
+                        "parts": [
+                            {
+                                "text": (
+                                    "You write concise operational summaries for crowd safety teams. "
+                                    "Summarize the current state in 2-3 short sentences and include 3 practical next actions. "
+                                    f"Input data:\n{prompt}"
+                                )
+                            }
+                        ],
+                    }
                 ],
-                "temperature": 0.2,
+                "generationConfig": {"temperature": 0.2},
             }
         ).encode("utf-8")
 
         headers = {
-            "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
         }
-        req = request.Request(self.endpoint, data=body, headers=headers, method="POST")
+        url = f"{self.endpoint.format(model=self.model)}?key={self.api_key}"
+        req = request.Request(url, data=body, headers=headers, method="POST")
 
         try:
             with request.urlopen(req, timeout=self.timeout_seconds) as response:
@@ -73,14 +82,18 @@ class HybridAIAdvisor:
         except (error.URLError, TimeoutError, ValueError, KeyError):
             return None
 
-        choices = data.get("choices", [])
-        if not choices:
+        candidates = data.get("candidates", [])
+        if not candidates:
             return None
 
-        message = choices[0].get("message", {})
-        content = message.get("content")
-        if isinstance(content, str) and content.strip():
-            return content.strip()
+        content = candidates[0].get("content", {})
+        parts = content.get("parts", [])
+        if not parts:
+            return None
+
+        text = parts[0].get("text")
+        if isinstance(text, str) and text.strip():
+            return text.strip()
         return None
 
     def _fallback_summary(self, decisions: Sequence[ProcessionDecision]) -> str:

@@ -157,6 +157,31 @@ class ImmersionPlannerAgent:
     ghats: Sequence[GhatConfig]
     cranes: Sequence[CraneConfig]
 
+    def _normalize_preferred_time(self, preferred_time: str) -> str:
+        value = preferred_time.strip()
+        label = value.lower()
+        if label in {"morning", "am"}:
+            return "09:00:00"
+        if label in {"afternoon", "noon"}:
+            return "14:00:00"
+        if label in {"evening", "pm"}:
+            return "18:00:00"
+        if label in {"night", "late night"}:
+            return "21:00:00"
+
+        try:
+            if "t" in label:
+                parsed = datetime.fromisoformat(value)
+                return parsed.strftime("%H:%M:%S")
+            parsed_time = datetime.strptime(value, "%H:%M:%S")
+            return parsed_time.strftime("%H:%M:%S")
+        except ValueError:
+            try:
+                parsed_time = datetime.strptime(value, "%H:%M")
+                return parsed_time.strftime("%H:%M:%S")
+            except ValueError:
+                return "18:00:00"
+
     def assign(
         self,
         procession: ProcessionRecord,
@@ -166,7 +191,8 @@ class ImmersionPlannerAgent:
         preferred_time: str,
         index: int,
     ) -> Tuple[ImmersionRecommendation, int, int]:
-        base_datetime = datetime.fromisoformat(f"{immersion_date}T{preferred_time}")
+        normalized_time = self._normalize_preferred_time(preferred_time)
+        base_datetime = datetime.fromisoformat(f"{immersion_date}T{normalized_time}")
         route_delay = timedelta(minutes=route.expected_travel_minutes)
         crowd_delay = timedelta(minutes=int(max(0.0, crowd.risk_score - 40) * 0.8))
         arrival_time = base_datetime + route_delay + crowd_delay

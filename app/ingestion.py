@@ -38,10 +38,10 @@ def load_idol_records(path: Path) -> List[IdolRecord]:
     return [
         IdolRecord(
             pandal_id=row["pandal_id"],
-            height=float(row["height"]),
+            height=float(row.get("height", row.get("idol_height", 0.0))),
             estimated_weight=float(row["estimated_weight"]),
-            width=float(row["width"]),
-            idol_type=row["type"],
+            width=float(row.get("width", row.get("idol_width", 0.0))),
+            idol_type=row.get("type", row.get("idol_type", "")),
         )
         for row in _read_rows(path)
     ]
