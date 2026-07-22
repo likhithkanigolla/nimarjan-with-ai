@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app.orchestrator import DigitalTwinOrchestrator
 
@@ -16,3 +19,8 @@ def test_orchestrator_produces_decisions() -> None:
     assert all(decision.immersion.crane_number in {1, 2, 3, 4} for decision in result.decisions)
     assert result.agent_reports
     assert result.agent_reports[-1].agent_name == "ai-advisor"
+
+
+if __name__ == "__main__":
+    test_orchestrator_produces_decisions()
+    print("ok")
