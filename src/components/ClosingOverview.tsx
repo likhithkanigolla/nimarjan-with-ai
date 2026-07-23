@@ -3,12 +3,12 @@ import { Boxes, ShieldAlert, Users2, Ambulance } from "lucide-react";
 
 export function ClosingOverview() {
   return (
-    <div className="flex-1 overflow-auto p-6 scrollbar-thin">
+    <div className="flex-1 overflow-auto p-6 scrollbar-thin text-white">
       <div className="max-w-5xl mx-auto space-y-6">
         <div>
-          <div className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground">Architecture · Closing</div>
+          <div className="text-[11px] uppercase tracking-[0.2em] text-white">Architecture · Closing</div>
           <h1 className="text-3xl font-semibold mt-1">One Synchronized Digital Twin</h1>
-          <p className="text-muted-foreground max-w-3xl mt-1">
+          <p className="text-white max-w-3xl mt-1">
             Crowd, traffic &amp; processions, immersion resources, and emergency response are inseparable.
             Managing them in isolation is why crises escalate. The Digital Twin unifies them.
           </p>
@@ -16,10 +16,10 @@ export function ClosingOverview() {
 
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { icon: Users2,      title: "Crowd",                    color: "var(--color-safe)",    text: "Density · flow · dwell" },
-            { icon: Boxes,       title: "Traffic & Processions",    color: "var(--color-info)",    text: "Routes · vehicles · ETA" },
-            { icon: ShieldAlert, title: "Immersion Resources",      color: "var(--color-predict)", text: "Queues · cranes · slots" },
-            { icon: Ambulance,   title: "Emergency Response",       color: "var(--color-critical)",text: "Corridors · units · ETA" },
+            { icon: Users2, title: "Crowd", color: "var(--color-safe)", text: "Density · flow · dwell" },
+            { icon: Boxes, title: "Traffic & Processions", color: "var(--color-info)", text: "Routes · vehicles · ETA" },
+            { icon: ShieldAlert, title: "Immersion Resources", color: "var(--color-predict)", text: "Queues · cranes · slots" },
+            { icon: Ambulance, title: "Emergency Response", color: "var(--color-critical)", text: "Corridors · units · ETA" },
           ].map((c, i) => (
             <motion.div key={c.title}
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06 }}

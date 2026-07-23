@@ -16,7 +16,7 @@ export function Header() {
           <Activity className="w-5 h-5 text-white" />
         </motion.div>
         <div className="leading-tight">
-          <div className="text-sm font-semibold tracking-wide">
+          <div className="text-sm font-bold tracking-wide text-white">
             Digital Twin for Event Operations
           </div>
           <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
@@ -34,8 +34,8 @@ export function Header() {
           <Radio className="w-3 h-3 text-[var(--color-safe)]" />
           Sim Time <span className="font-mono">{simTime}</span>
         </span> */}
-        <span className="chip">
-          <ShieldCheck className="w-3 h-3 text-[var(--color-info)]" />
+        <span className="chip text-white">
+          <ShieldCheck className="w-3 h-3 text-white" />
           Digital Twin:{" "}
           <span className="text-[var(--color-safe)] font-semibold ml-1">SYNCHRONIZED</span>
           <motion.span

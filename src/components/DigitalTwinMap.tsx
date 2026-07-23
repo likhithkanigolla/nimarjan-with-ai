@@ -25,11 +25,25 @@ const makeImgIcon = (
   label = "",
   ring = false,
   bg = "transparent",
-  rounded = bg !== "transparent",
-) =>
-  L.divIcon({
-    html: `<div class="${ring ? "dt-pulse" : ""}" style="width:${size}px;height:${size}px;background:${bg};position:relative;display:flex;align-items:center;justify-content:center;${bg !== 'transparent' ? 'border-radius:50%;' : ''}">
-             <img src="${baseUrl}icons/${src}" style="width:100%;height:100%;object-fit:contain;" />
+  shape: "circle" | "square" | "triangle" = "circle"
+) => {
+  let shapeStyle = "";
+  let imgSize = "100%";
+  if (bg !== "transparent") {
+    if (shape === "circle") {
+      shapeStyle = "border-radius:50%;";
+      imgSize = "65%";
+    } else if (shape === "square") {
+      shapeStyle = "border-radius:4px;";
+      imgSize = "75%";
+    } else if (shape === "triangle") {
+      shapeStyle = "clip-path: polygon(50% 10%, 0% 100%, 100% 100%);";
+      imgSize = "50%";
+    }
+  }
+  return L.divIcon({
+    html: `<div class="${ring ? "dt-pulse" : ""}" style="width:${size}px;height:${size}px;background:${bg};position:relative;display:flex;align-items:center;justify-content:center;${shapeStyle}">
+             <img src="${baseUrl}icons/${src}" style="width:${imgSize};height:${imgSize};object-fit:contain;${shape === 'triangle' ? 'margin-top:20%;' : ''}" />
              ${label ? `<div style="position:absolute;bottom:20%;font-size:11px;font-weight:bold;background:rgba(0,0,0,0.85);color:white;padding:2px 6px;border-radius:4px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.5);">${label}</div>` : ""}
            </div>`,
     className: "dt-icon-wrap",
@@ -37,21 +51,22 @@ const makeImgIcon = (
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -size / 2],
   });
+};
 
 const ICONS = {
   ip: (label: string) => makeImgIcon("hotspot.png", 50, label, false),
   ipFocus: (label: string) => makeImgIcon("hotspot.png", 180, label, true),
-  crane: (bg: string) => makeImgIcon("crane.png", 28, "", false, bg, false),
-  cameraC: () => makeIcon("var(--color-predict)", "◉"),
-  cameraCP: () => makeIcon("var(--color-predict)", "◉", true),
-  cameraT: () => makeIcon("#68a3ff", "◱"),
+  crane: (bg: string) => makeImgIcon("crane.png", 32, "", false, bg, "triangle"),
+  cameraC: () => makeImgIcon("camera.png", 24, "", false, "var(--color-predict)", "circle"),
+  cameraCP: () => makeImgIcon("camera.png", 24, "", true, "var(--color-predict)", "circle"),
+  cameraT: () => makeImgIcon("camera.png", 24, "", false, "#68a3ff", "circle"),
   hospital: () => makeIcon("var(--color-critical)", "＋"),
   police: () => makeIcon("#5a7cff", "★"),
-  ambulance: () => makeImgIcon("ambulance.png", 32, "", false, "var(--color-critical)"),
+  ambulance: () => makeImgIcon("ambulance.png", 32, "", false, "var(--color-critical)", "square"),
   procession: (color: string, label: string) =>
     L.divIcon({
       html: `<div style="display:flex;align-items:center;gap:6px;">
-        <div class="dt-marker" style="width:28px;height:28px;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,0.2);">
+        <div class="dt-marker" style="width:28px;height:28px;background:var(--color-critical);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,0.2);">
           <img src="${baseUrl}icons/truck.png" style="width:18px;height:18px;object-fit:contain;" />
         </div>
         <div style="background:rgba(15,20,35,0.85);border:1px solid rgba(255,255,255,0.12);padding:2px 6px;border-radius:6px;font-size:10px;color:#e6ecff;white-space:nowrap;">${label}</div>
@@ -373,16 +388,16 @@ export default function DigitalTwinMap() {
           cranes.map((c, i) => {
             const ip = ips.find((x) => x.id === c.immersion_point_id);
             if (!ip) return null;
-            
+
             let angleBase = Math.PI / 2; // Default North
             if (ip.id === "IP-03") angleBase = -Math.PI * 0.75; // South-West for IP-03
-            
-            const spread = ((i % 5) - 2) * 0.25; 
+
+            const spread = ((i % 5) - 2) * 0.25;
             const angle = angleBase + spread;
-            const dist = 0.0012; 
-            
+            const dist = 0.0012;
+
             const pos: LatLng = [
-              ip.coordinates[0] + dist * Math.sin(angle), 
+              ip.coordinates[0] + dist * Math.sin(angle),
               ip.coordinates[1] + dist * Math.cos(angle)
             ];
             const bg =
@@ -396,8 +411,8 @@ export default function DigitalTwinMap() {
             return (
               <Marker key={c.id} position={pos as any} icon={ICONS.crane(bg)}>
                 <Popup>
-                  <div className="font-semibold text-[13px]">{c.id}</div>
-                  <div className="text-[11px] opacity-80 mt-1">
+                  <div className="font-semibold text-[13px] text-white">{c.id}</div>
+                  <div className="text-[11px] text-white opacity-90 mt-1">
                     Status: <b>{c.status}</b>
                     <br />
                     Max weight: {c.max_supported_weight} kg
@@ -535,7 +550,7 @@ function LegendRow({ color, label, dash }: { color: string; label: string; dash?
           borderTop: dash ? `2px dashed ${color}` : undefined,
         }}
       />
-      <span>{label}</span>
+      <span className="text-white">{label}</span>
     </div>
   );
 }

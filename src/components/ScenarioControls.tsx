@@ -7,7 +7,7 @@ export function ScenarioControls() {
   const total = currentScenario.steps.length;
 
   return (
-    <div className="glass rounded-lg px-3 py-2 flex items-center gap-3">
+    <div className="glass rounded-lg px-3 py-2 flex items-center gap-3 text-white">
       <div className="flex items-center gap-1">
         <button
           onClick={() => dispatch({ type: "RESET" })}
@@ -32,7 +32,7 @@ export function ScenarioControls() {
       <div className="h-6 w-px bg-[var(--panel-border)]" />
       <div className="flex items-center gap-2 min-w-0">
         <span className="chip"><Zap className="w-3 h-3 text-[var(--color-warn)]" /> Step {stepIndex + 1} / {total}</span>
-        <span className="text-sm font-medium truncate">{currentStep.title}</span>
+        <span className="text-sm font-medium truncate text-white">{currentStep.title}</span>
       </div>
     </div>
   );
