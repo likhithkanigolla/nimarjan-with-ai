@@ -18,7 +18,7 @@ function Home() {
   return (
     <>
       <AppShell />
-      <Toaster position="top-right" theme="dark" richColors closeButton />
+      <Toaster position="bottom-center" theme="dark" richColors closeButton />
     </>
   );
 }
