@@ -35,7 +35,7 @@ export function ClosingOverview() {
 
         <div className="glass rounded-xl p-4 flex-1 min-h-[420px] flex items-center justify-center overflow-hidden">
           <img
-            src="/nimarjan.jpg"
+            src={`${import.meta.env.BASE_URL}nimarjan.jpg`}
             alt="Ganesh Nimarjan"
             className="max-h-[520px] w-full object-contain"
           />
