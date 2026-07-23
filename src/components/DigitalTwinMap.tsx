@@ -19,7 +19,14 @@ const makeIcon = (bg: string, glyph: string, ring = false) =>
 
 const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
 
-const makeImgIcon = (src: string, size = 32, label = "", ring = false, bg = "transparent") =>
+const makeImgIcon = (
+  src: string,
+  size = 32,
+  label = "",
+  ring = false,
+  bg = "transparent",
+  rounded = bg !== "transparent",
+) =>
   L.divIcon({
     html: `<div class="${ring ? "dt-pulse" : ""}" style="width:${size}px;height:${size}px;background:${bg};position:relative;display:flex;align-items:center;justify-content:center;${bg !== 'transparent' ? 'border-radius:50%;' : ''}">
              <img src="${baseUrl}icons/${src}" style="width:100%;height:100%;object-fit:contain;" />
@@ -34,7 +41,7 @@ const makeImgIcon = (src: string, size = 32, label = "", ring = false, bg = "tra
 const ICONS = {
   ip: (label: string) => makeImgIcon("hotspot.png", 50, label, false),
   ipFocus: (label: string) => makeImgIcon("hotspot.png", 180, label, true),
-  crane: (bg: string) => makeImgIcon("crane.png", 28, "", false, bg),
+  crane: (bg: string) => makeImgIcon("crane.png", 28, "", false, bg, false),
   cameraC: () => makeIcon("var(--color-predict)", "◉"),
   cameraCP: () => makeIcon("var(--color-predict)", "◉", true),
   cameraT: () => makeIcon("#68a3ff", "◱"),
@@ -384,7 +391,7 @@ export default function DigitalTwinMap() {
                 : c.status === "MAINTENANCE"
                   ? "var(--color-warn)"
                   : c.status === "BUSY"
-                    ? "#5a7cff"
+                    ? "#f1c453"
                     : "var(--color-safe)";
             return (
               <Marker key={c.id} position={pos as any} icon={ICONS.crane(bg)}>
@@ -470,7 +477,7 @@ export default function DigitalTwinMap() {
       <div className="absolute top-3 left-3 glass rounded-md text-[11px] p-2 z-[500] space-y-1 pointer-events-none">
         <LegendRow color="var(--color-info)" label="Immersion Point" />
         <LegendRow color="var(--color-safe)" label="Crane · Available" />
-        <LegendRow color="#5a7cff" label="Crane · Busy" />
+        <LegendRow color="#f1c453" label="Crane · Busy" />
         <LegendRow color="var(--color-critical)" label="Crane · Fault / Emergency" />
         <LegendRow color="var(--color-predict)" label="Crowd Camera" />
         <LegendRow color="#68a3ff" label="Traffic Camera" />
