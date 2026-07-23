@@ -35,8 +35,8 @@ export function AgenticApplicationOverview() {
     <div className="t">
       <i className="ti ti-hierarchy-3"></i>
       <div>
-        <h1>Solution architecture — AI-powered digital twin for Ganesh immersion crowd management</h1>
-        <div className="sub">Physical sensing → digital twin core → predictive decision engine → authority approval → field action</div>
+        <h1>Agentic AI application architecture — DT components, backend agents, and hybrid AI briefing</h1>
+        <div className="sub">DT components monitor and display state → backend agents analyze, predict, simulate, and decide → HybridAIAdvisor produces the final summary / briefing</div>
       </div>
     </div>
     <div className="arch-legend">
@@ -124,21 +124,27 @@ export function AgenticApplicationOverview() {
     <div className="arch-hub">Digital<br />twin<br />engine</div>
 
     <div className="arch-node" style={{left: '263px', top: '110px'}}>
-      <div className="bub"><i className="ti ti-eye"></i><span className="arch-start-ring"></span><span className="arch-start-badge"><i className="ti ti-player-play"></i></span></div><b>Monitor</b><em>Collects live state</em>
+        <div className="bub"><i className="ti ti-eye"></i><span className="arch-start-ring"></span><span className="arch-start-badge"><i className="ti ti-player-play"></i></span></div><b>Monitor</b><em>DT components display live state</em>
     </div>
     <div className="arch-node agentic" style={{left: '462px', top: '255px'}}>
       <div className="bub"><i className="ti ti-robot-face"></i></div><b>Analyze</b><em><b>Agentic AI</b> anomaly detection</em>
     </div>
     <div className="arch-node" style={{left: '387px', top: '490px'}}>
-      <div className="bub"><i className="ti ti-chart-line"></i></div><b>Predict</b><em>Forecasts crowd evolution</em>
+        <div className="bub"><i className="ti ti-chart-line"></i></div><b>Predict</b><em>Backend agents forecast crowd and traffic evolution</em>
     </div>
     <div className="arch-node" style={{left: '139px', top: '490px'}}>
-      <div className="bub"><i className="ti ti-adjustments"></i></div><b>Simulate</b><em>Runs what-if scenarios</em>
+        <div className="bub"><i className="ti ti-adjustments"></i></div><b>Simulate</b><em>Backend agents run what-if scenarios</em>
     </div>
     <div className="arch-node agentic" style={{left: '64px', top: '255px'}}>
-      <div className="bub"><i className="ti ti-robot-face"></i></div><b>Decide</b><em><b>Agentic AI</b> orchestration</em>
+        <div className="bub"><i className="ti ti-robot-face"></i></div><b>Decide</b><em>Backend agents prepare action recommendations</em>
     </div>
   </div>
+
+    <div className="arch-box" id="s3" style={{left: '1096px', top: '182px', width: '296px', height: '170px'}}>
+      <div className="arch-box-title"><i className="ti ti-message-report"></i>HybridAIAdvisor</div>
+      <div className="arch-row"><i className="ti ti-sparkles"></i><div><b>Final summary / briefing</b><em>Converts agent outputs into the closing operational brief</em></div></div>
+      <div className="arch-row"><i className="ti ti-plug-connected"></i><div><b>Fallback ready</b><em>Local summary if the remote model is unavailable</em></div></div>
+    </div>
 
   {/* STAGE 4 : decision support */}
   <div className="arch-box" id="s4">
