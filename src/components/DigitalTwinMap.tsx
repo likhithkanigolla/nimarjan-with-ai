@@ -17,10 +17,12 @@ const makeIcon = (bg: string, glyph: string, ring = false) =>
     popupAnchor: [0, -14],
   });
 
+const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+
 const makeImgIcon = (src: string, size = 32, label = "", ring = false, bg = "transparent") =>
   L.divIcon({
     html: `<div class="${ring ? "dt-pulse" : ""}" style="width:${size}px;height:${size}px;background:${bg};position:relative;display:flex;align-items:center;justify-content:center;${bg !== 'transparent' ? 'border-radius:50%;' : ''}">
-             <img src="${import.meta.env.BASE_URL}icons/${src}" style="width:100%;height:100%;object-fit:contain;" />
+             <img src="${baseUrl}icons/${src}" style="width:100%;height:100%;object-fit:contain;" />
              ${label ? `<div style="position:absolute;bottom:20%;font-size:11px;font-weight:bold;background:rgba(0,0,0,0.85);color:white;padding:2px 6px;border-radius:4px;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,0.5);">${label}</div>` : ""}
            </div>`,
     className: "dt-icon-wrap",
@@ -30,7 +32,7 @@ const makeImgIcon = (src: string, size = 32, label = "", ring = false, bg = "tra
   });
 
 const ICONS = {
-  ip: (label: string) => makeImgIcon("hotspot.png", 160, label, false),
+  ip: (label: string) => makeImgIcon("hotspot.png", 50, label, false),
   ipFocus: (label: string) => makeImgIcon("hotspot.png", 180, label, true),
   crane: (bg: string) => makeImgIcon("crane.png", 28, "", false, bg),
   cameraC: () => makeIcon("var(--color-predict)", "◉"),
@@ -43,7 +45,7 @@ const ICONS = {
     L.divIcon({
       html: `<div style="display:flex;align-items:center;gap:6px;">
         <div class="dt-marker" style="width:28px;height:28px;background:${color};border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px rgba(255,255,255,0.2);">
-          <img src="${import.meta.env.BASE_URL}icons/truck.png" style="width:18px;height:18px;object-fit:contain;" />
+          <img src="${baseUrl}icons/truck.png" style="width:18px;height:18px;object-fit:contain;" />
         </div>
         <div style="background:rgba(15,20,35,0.85);border:1px solid rgba(255,255,255,0.12);padding:2px 6px;border-radius:6px;font-size:10px;color:#e6ecff;white-space:nowrap;">${label}</div>
       </div>`,
@@ -65,12 +67,12 @@ const osrmCache = new Map<string, LatLng[]>();
 
 async function fetchOSRMRoute(coordinates: LatLng[]): Promise<LatLng[]> {
   if (coordinates.length < 2) return coordinates;
-  
+
   const cacheKey = JSON.stringify(coordinates);
   if (osrmCache.has(cacheKey)) {
     return osrmCache.get(cacheKey)!;
   }
-  
+
   try {
     const coordString = coordinates.map(c => `${c[1]},${c[0]}`).join(';');
     const url = `https://router.project-osrm.org/route/v1/driving/${coordString}?overview=full&geometries=geojson`;

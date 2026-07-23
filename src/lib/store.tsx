@@ -14,7 +14,17 @@ import { scenarios, type Scenario } from "@/lib/scenarios";
 import type { Role } from "@/lib/types";
 
 export type ViewKey =
-  "application" | "team" | "scenario1" | "scenario2" | "scenario3" | "future" | "closing";
+  | "opening"
+  | "intro"
+  | "vision"
+  | "stakeholders"
+  | "application"
+  | "team"
+  | "scenario1"
+  | "scenario2"
+  | "scenario3"
+  | "future"
+  | "closing";
 
 export interface AuditEntry {
   id: string;
@@ -62,7 +72,7 @@ function generateUUID() {
 }
 
 const initial: State = {
-  view: "application",
+  view: "opening",
   role: "Command Center",
   presenterMode: false,
   scenarioId: null,

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { useApp, type ViewKey } from "@/lib/store";
-import { Bot, Users, Radar, Route as RouteIcon, Boxes, Lightbulb, Layers } from "lucide-react";
+import { Bot, Users, Radar, Route as RouteIcon, Boxes, Lightbulb, Layers, Presentation } from "lucide-react";
 
 const nav: Array<{
   key: ViewKey;
@@ -8,6 +8,10 @@ const nav: Array<{
   icon: React.ComponentType<{ className?: string }>;
   hint?: string;
 }> = [
+  { key: "opening", label: "Opening", icon: Presentation },
+  { key: "intro", label: "Introduction", icon: Presentation },
+  { key: "vision", label: "Vision", icon: Presentation },
+  { key: "stakeholders", label: "Stakeholders", icon: Presentation },
   {
     key: "application",
     label: "Agentic AI Application",

@@ -40,7 +40,7 @@ export interface OrchestratorSnapshot {
   remaining_crane_capacity?: string[];
 }
 
-const API_BASE_URL = import.meta.env.VITE_AGENTIC_API_BASE_URL ?? "http://127.0.0.1:8000";
+const API_BASE_URL = import.meta.env.VITE_AGENTIC_API_BASE_URL ?? "https://smartcitylivinglab.iiit.ac.in/nimarjan-api";
 
 export const dataService = {
   getMapCenter: () => MAP_CENTER,

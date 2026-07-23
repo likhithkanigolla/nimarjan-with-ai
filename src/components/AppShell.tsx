@@ -124,17 +124,15 @@ function ViewSwitcher() {
         transition={{ duration: 0.25 }}
         className="flex-1 flex flex-col min-h-0"
       >
+        {view === "opening" && <SlideViewer title="Opening" imageSrc="/slides/opening-slide.jpg" />}
+        {view === "intro" && <SlideViewer title="Introduction" imageSrc="/slides/introduction.jpg" />}
+        {view === "vision" && <SlideViewer title="Vision" imageSrc="/slides/vision.jpg" />}
+        {view === "stakeholders" && <SlideViewer title="Stakeholders" imageSrc="/slides/stakeholders.jpg" />}
         {view === "application" && <AgenticApplicationOverview />}
         {view === "team" && (
           <SlideViewer
             title="Team"
-            subtitle="Team presentation · Agentic AI platform for event operations"
-            imageSrc="/slides/team-placeholder.jpg"
-            bullets={[
-              "Moderator + 4 team members",
-              "Roles: Vision · Data · Simulation · Ops",
-              "Replace this slide with the team photo",
-            ]}
+            imageSrc="/slides/team.jpg"
           />
         )}
         {(view === "scenario1" || view === "scenario2" || view === "scenario3") && (
@@ -143,16 +141,7 @@ function ViewSwitcher() {
         {view === "future" && (
           <SlideViewer
             title="Future Work"
-            subtitle="From prototype to production-grade agentic AI platform"
-            imageSrc="/slides/future-work-placeholder.jpg"
-            bullets={[
-              "AI prediction agent (crowd density, arrival forecasting)",
-              "Traffic optimization agent (system-wide, not greedy shortest path)",
-              "Resource allocation agent (crane/queue/window optimization)",
-              "Real-time WebSocket feeds from cameras, GPS, IoT",
-              "Full audit trail with cryptographic signing",
-              "Multi-agency access with fine-grained RBAC",
-            ]}
+            imageSrc="/slides/future-work.jpg"
           />
         )}
         {view === "closing" && <ClosingOverview />}
