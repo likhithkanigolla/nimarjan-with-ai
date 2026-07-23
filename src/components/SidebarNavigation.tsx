@@ -9,6 +9,7 @@ const nav: Array<{
   hint?: string;
 }> = [
   { key: "opening", label: "Opening", icon: Presentation },
+  { key: "team", label: "Team", icon: Users },
   { key: "intro", label: "Introduction", icon: Presentation },
   { key: "vision", label: "Vision", icon: Presentation },
   { key: "stakeholders", label: "Stakeholders", icon: Presentation },
@@ -22,8 +23,7 @@ const nav: Array<{
   { key: "scenario2", label: "Traffic & Routes", icon: RouteIcon, hint: "ETA + diversion" },
   { key: "scenario3", label: "Immersion Planning", icon: Boxes, hint: "Time + crane allocation" },
   { key: "future", label: "Future Work", icon: Lightbulb },
-  { key: "closing", label: "Closing", icon: Layers },
-  { key: "team", label: "Team", icon: Users },
+  { key: "closing", label: "Closing", icon: Layers }
 ];
 
 export function SidebarNavigation() {
