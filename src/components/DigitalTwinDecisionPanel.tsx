@@ -4,11 +4,11 @@ import { useApp, useCanApprove } from "@/lib/store";
 
 const toneColor = (t?: string) =>
   t === "safe" ? "text-[var(--color-safe)]"
-  : t === "warn" ? "text-[var(--color-warn)]"
-  : t === "risk" ? "text-[var(--color-risk)]"
-  : t === "critical" ? "text-[var(--color-critical)]"
-  : t === "info" ? "text-[var(--color-info)]"
-  : "text-foreground";
+    : t === "warn" ? "text-[var(--color-warn)]"
+      : t === "risk" ? "text-[var(--color-risk)]"
+        : t === "critical" ? "text-[var(--color-critical)]"
+          : t === "info" ? "text-[var(--color-info)]"
+            : "text-foreground";
 
 function Section({ icon: Icon, title, children, tone }: { icon: any; title: string; children: React.ReactNode; tone?: string }) {
   return (
@@ -18,7 +18,7 @@ function Section({ icon: Icon, title, children, tone }: { icon: any; title: stri
     >
       <div className="flex items-center gap-2 mb-2">
         <Icon className={`w-4 h-4 ${toneColor(tone)}`} />
-        <div className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{title}</div>
+        <div className="text-[11px] uppercase tracking-[0.14em] text-white">{title}</div>
       </div>
       {children}
     </motion.div>
@@ -36,11 +36,11 @@ export function DigitalTwinDecisionPanel() {
       <AnimatePresence mode="popLayout">
         {p?.current && (
           <Section key="cur" icon={Gauge} title="Current State" tone="info">
-            <div className="font-medium text-sm mb-2">{p.current.title}</div>
+            <div className="font-medium text-sm mb-2 text-white">{p.current.title}</div>
             <ul className="space-y-1.5">
               {p.current.items.map((it, i) => (
                 <li key={i} className="flex justify-between text-xs">
-                  <span className="text-muted-foreground">{it.label}</span>
+                  <span className="text-white">{it.label}</span>
                   <span className={`font-mono ${toneColor(it.tone)}`}>{it.value}</span>
                 </li>
               ))}
@@ -50,13 +50,13 @@ export function DigitalTwinDecisionPanel() {
 
         {p?.prediction && (
           <Section key="pred" icon={Sparkles} title={`Prediction · +${p.prediction.horizonMin} min`} tone="critical">
-            <div className="font-medium text-sm mb-1">{p.prediction.title}</div>
-            <p className="text-xs text-muted-foreground mb-2">{p.prediction.body}</p>
+            <div className="font-medium text-sm mb-1 text-white">{p.prediction.title}</div>
+            <p className="text-xs text-white mb-2">{p.prediction.body}</p>
             {p.prediction.items && (
               <ul className="space-y-1.5">
                 {p.prediction.items.map((it, i) => (
                   <li key={i} className="flex justify-between text-xs">
-                    <span className="text-muted-foreground">{it.label}</span>
+                    <span className="text-white">{it.label}</span>
                     <span className={`font-mono ${toneColor(it.tone)}`}>{it.value}</span>
                   </li>
                 ))}
@@ -72,7 +72,7 @@ export function DigitalTwinDecisionPanel() {
 
         {p?.simulation && (
           <Section key="sim" icon={Cpu} title="Simulation" tone="info">
-            <div className="font-medium text-sm mb-2">{p.simulation.title}</div>
+            <div className="font-medium text-sm mb-2 text-white">{p.simulation.title}</div>
             <div className="space-y-1.5">
               {p.simulation.options.map((o) => (
                 <div key={o.id}
@@ -80,14 +80,14 @@ export function DigitalTwinDecisionPanel() {
                     ? "border-[var(--color-safe)]/60 bg-[var(--color-safe)]/8"
                     : "border-[var(--panel-border)]"}`}>
                   <div className="flex items-center justify-between">
-                    <div className="text-xs font-semibold">{o.label}</div>
+                    <div className="text-xs font-semibold text-white">{o.label}</div>
                     {o.recommended && (
                       <span className="chip" style={{ color: "var(--color-safe)", borderColor: "var(--color-safe)" }}>
                         Recommended
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-muted-foreground mt-1">{o.detail}</div>
+                  <div className="text-[11px] text-white mt-1">{o.detail}</div>
                 </div>
               ))}
             </div>
@@ -96,13 +96,13 @@ export function DigitalTwinDecisionPanel() {
 
         {p?.recommendation && (
           <Section key="rec" icon={ShieldAlert} title="Recommendation" tone="warn">
-            <div className="font-medium text-sm mb-2">{p.recommendation.title}</div>
+            <div className="font-medium text-sm mb-2 text-white">{p.recommendation.title}</div>
             {p.recommendation.actions.length > 0 && (
               <ul className="space-y-1 mb-2">
                 {p.recommendation.actions.map((a, i) => (
-                  <li key={i} className="text-xs flex gap-2">
-                    <span className="text-[var(--color-warn)]">◆</span>
-                    <span>{a}</span>
+                  <li key={i} className="text-xs flex gap-2 text-white">
+                    <span className="text-[var(--color-warn)] mt-[1px]">◆</span>
+                    <span className="leading-tight">{a}</span>
                   </li>
                 ))}
               </ul>
@@ -135,13 +135,13 @@ export function DigitalTwinDecisionPanel() {
 
         {p?.impact && (
           <Section key="imp" icon={Sparkles} title="Expected Impact" tone="safe">
-            <div className="font-medium text-sm mb-2">{p.impact.title}</div>
+            <div className="font-medium text-sm mb-2 text-white">{p.impact.title}</div>
             <div className="grid grid-cols-2 gap-2">
               <div className="rounded-md border border-[var(--panel-border)] p-2">
-                <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">Before</div>
+                <div className="text-[10px] uppercase tracking-wider text-white mb-1">Before</div>
                 {p.impact.before.map((it, i) => (
                   <div key={i} className="text-xs flex justify-between">
-                    <span className="text-muted-foreground">{it.label}</span>
+                    <span className="text-white">{it.label}</span>
                     <span className="font-mono">{it.value}</span>
                   </div>
                 ))}
@@ -150,7 +150,7 @@ export function DigitalTwinDecisionPanel() {
                 <div className="text-[10px] uppercase tracking-wider text-[var(--color-safe)] mb-1">After</div>
                 {p.impact.after.map((it, i) => (
                   <div key={i} className="text-xs flex justify-between">
-                    <span className="text-muted-foreground">{it.label}</span>
+                    <span className="text-white">{it.label}</span>
                     <span className="font-mono text-[var(--color-safe)]">{it.value}</span>
                   </div>
                 ))}

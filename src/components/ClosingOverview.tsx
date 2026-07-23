@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { Boxes, ShieldAlert, Users2, Ambulance } from "lucide-react";
+import { Ambulance, Boxes, ShieldAlert, Users2 } from "lucide-react";
 
 export function ClosingOverview() {
   return (
@@ -10,10 +10,10 @@ export function ClosingOverview() {
           <h1 className="text-3xl font-semibold mt-1 text-white">One Synchronized Digital Twin</h1>
           <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-3xl">
             {[
-              { icon: Users2, label: "Crowd Management", color: "var(--color-safe)" },
-              { icon: Boxes, label: "Traffic Streamlining", color: "var(--color-info)" },
-              { icon: ShieldAlert, label: "Immersion Scheduling", color: "var(--color-predict)" },
-              { icon: Ambulance, label: "Emergency Response", color: "var(--color-critical)" },
+              { icon: Users2, label: "Crowd management", color: "var(--color-safe)" },
+              { icon: Boxes, label: "Traffic streamlining", color: "var(--color-info)" },
+              { icon: ShieldAlert, label: "Immersion scheduling", color: "var(--color-predict)" },
+              { icon: Ambulance, label: "Emergency response", color: "var(--color-critical)" },
             ].map((item) => (
               <motion.div
                 key={item.label}

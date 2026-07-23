@@ -30,7 +30,7 @@ function ScenarioWorkspace() {
           <div className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             {currentScenario.name}
           </div>
-          <div className="text-sm font-medium truncate">{currentScenario.headline}</div>
+          <div className="text-sm font-medium truncate text-white">{currentScenario.headline}</div>
         </div>
         <ScenarioControls />
       </div>

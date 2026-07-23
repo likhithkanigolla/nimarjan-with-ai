@@ -43,21 +43,21 @@
   --radius: 0.625rem;
   /* Command-center dark palette */
   --background: oklch(0.16 0.02 260);
-  --foreground: oklch(0.96 0.005 260);
+  --foreground: #ffffff;
   --card: oklch(0.20 0.025 260);
-  --card-foreground: oklch(0.96 0.005 260);
+  --card-foreground: #ffffff;
   --popover: oklch(0.22 0.025 260);
-  --popover-foreground: oklch(0.96 0.005 260);
+  --popover-foreground: #ffffff;
   --primary: oklch(0.70 0.16 235);
-  --primary-foreground: oklch(0.10 0.02 260);
+  --primary-foreground: #000000;
   --secondary: oklch(0.26 0.03 260);
-  --secondary-foreground: oklch(0.96 0.005 260);
+  --secondary-foreground: #ffffff;
   --muted: oklch(0.24 0.02 260);
-  --muted-foreground: oklch(0.70 0.02 260);
+  --muted-foreground: rgba(255, 255, 255, 0.7);
   --accent: oklch(0.30 0.05 260);
-  --accent-foreground: oklch(0.98 0.005 260);
+  --accent-foreground: #ffffff;
   --destructive: oklch(0.62 0.22 25);
-  --destructive-foreground: oklch(0.98 0.005 260);
+  --destructive-foreground: #ffffff;
   --border: oklch(0.30 0.03 260);
   --input: oklch(0.28 0.03 260);
   --ring: oklch(0.70 0.16 235);
@@ -111,7 +111,7 @@
   background: #0b1220;
   font-family: inherit;
 }
-.leaflet-tile { filter: brightness(0.7) invert(0.92) contrast(1.05) hue-rotate(180deg) saturate(0.65); }
+.leaflet-tile { /* removed filter to enable light mode */ }
 .leaflet-control-attribution {
   background: rgba(15,20,35,0.7) !important;
   color: #9aa4bd !important;

@@ -17,8 +17,8 @@ export function AuditLog() {
             initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }}
             className="text-[11px] leading-snug flex gap-2"
           >
-            <span className="font-mono text-muted-foreground">{e.time}</span>
-            <span>{e.text}</span>
+            <span className="font-mono text-white">{e.time}</span>
+            <span className="text-[var(--color-info)]">{e.text}</span>
           </motion.div>
         ))}
       </div>
