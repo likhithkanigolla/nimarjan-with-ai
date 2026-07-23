@@ -109,7 +109,7 @@ export interface Scenario {
   steps: ScenarioStep[];
 }
 
-const IP03: LatLng = [17.421, 78.4715];
+const IP03: LatLng = [17.428968089324226, 78.47464074681837];
 const IP02: LatLng = [17.4285, 78.4772];
 const IP05: LatLng = [17.438, 78.383];
 
@@ -141,8 +141,8 @@ export const scenario1: Scenario = {
       pulseCameras: ["CAM-02", "CAM-03"],
       heatZones: [{ center: IP03, radius: 320, level: "safe", label: "IP-03 crowd — NORMAL" }],
       flows: [
-        { from: [17.4165, 78.47], to: IP03 },
-        { from: [17.425, 78.47], to: IP03 },
+        { from: [17.43441867771385, 78.47749722549584], to: IP03 },
+        { from: [17.435380529351583, 78.4747247608971], to: IP03 },
       ],
       focusIds: ["IP-03"],
       kpis: [
@@ -186,9 +186,9 @@ export const scenario1: Scenario = {
         },
       ],
       flows: [
-        { from: [17.4165, 78.47], to: IP03, intensity: 1 },
-        { from: [17.425, 78.47], to: IP03, intensity: 1 },
-        { from: [17.418, 78.474], to: IP03, intensity: 0.8 },
+        { from: [17.432054104216014, 78.48510049962263], to: IP03, intensity: 1 },
+        { from: [17.437224064149245, 78.46875976130592], to: IP03, intensity: 1 },
+        { from: [17.44355606361005, 78.47711916214335], to: IP03, intensity: 0.8 },
       ],
       focusIds: ["IP-03"],
       kpis: [
@@ -254,8 +254,8 @@ export const scenario1: Scenario = {
       ],
       flows: [
         {
-          from: [17.4165, 78.47],
-          to: [17.4235, 78.4665],
+          from: [17.437424447352193, 78.46955789505593],
+          to: IP03,
           color: "var(--color-info)",
           dashed: true,
         },
@@ -298,7 +298,7 @@ export const scenario1: Scenario = {
       heatZones: [
         { center: IP03, radius: 340, level: "safe", label: "After intervention — 82%" },
         {
-          center: [17.423, 78.468],
+          center: IP03,
           radius: 260,
           level: "warn",
           label: "Zone B receiving diverted flow",
@@ -308,7 +308,7 @@ export const scenario1: Scenario = {
         { id: "R3-A", style: "closed" },
         { id: "R3-B", style: "selected" },
       ],
-      flows: [{ from: [17.4165, 78.47], to: [17.423, 78.468], color: "var(--color-safe)" }],
+      flows: [{ from: [17.437224064149245, 78.46875976130592], to: IP03, color: "var(--color-safe)" }],
       focusIds: ["IP-03"],
       kpis: [
         { label: "Projected utilization", value: "82%", tone: "safe" },
@@ -349,12 +349,12 @@ export const scenario1: Scenario = {
       layers: { crowd: true, immersion: true, routes: true, emergency: true, predictions: true },
       heatZones: [{ center: IP03, radius: 340, level: "safe" }],
       activeRoutes: [
-        { id: "R3-A", style: "faded" },
-        { id: "R3-B", style: "faded" },
-        { id: "R3-C", style: "faded" },
+        { id: "R3-A", style: "primary" },
+        { id: "R3-B", style: "alt" },
+        { id: "R3-C", style: "selected" },
       ],
       emergencyMarkers: [
-        { id: "EV-1", coordinates: [17.4198, 78.4695], label: "Medical Emergency" },
+        { id: "EV-1", coordinates: IP03, label: "Medical Emergency" },
       ],
       focusIds: ["EMS-03", "EMS-01"],
       kpis: [
@@ -394,7 +394,7 @@ export const scenario1: Scenario = {
       title: "Emergency Corridor Approved",
       stage: "APPROVE",
       cue: "Approve the corridor. Ambulance animates along Route C.",
-      mapCenter: [17.42, 78.464],
+      mapCenter: IP03,
       mapZoom: 15,
       layers: { immersion: true, routes: true, emergency: true, predictions: true },
       activeRoutes: [
@@ -408,18 +408,26 @@ export const scenario1: Scenario = {
           label: "Ambulance A-14",
           kind: "ambulance",
           path: [
-            [17.4225, 78.47],
-            [17.42, 78.4665],
-            [17.4175, 78.4615],
-            [17.4172, 78.4585],
-            [17.4175, 78.457],
+            [17.432075, 78.475388],
+            [17.430863, 78.473552],
+            [17.429652, 78.471717],
+            [17.428440, 78.469881],
+            [17.427228, 78.468046],
+            [17.426017, 78.466210],
+            [17.424805, 78.464375],
+            [17.423593, 78.462539],
+            [17.422382, 78.460703],
+            [17.421170, 78.458868],
+            [17.419958, 78.457032],
+            [17.418747, 78.455197],
+            [17.417388, 78.457133]
           ],
           progress: 1,
           color: "var(--color-critical)",
         },
       ],
       emergencyMarkers: [
-        { id: "EV-1", coordinates: [17.4198, 78.4695], label: "Medical Emergency" },
+        { id: "EV-1", coordinates: IP03, label: "Medical Emergency" },
       ],
       focusIds: ["EMS-03", "EMS-01"],
       kpis: [

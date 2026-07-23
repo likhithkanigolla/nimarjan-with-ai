@@ -26,14 +26,14 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-2">
-        <span className="chip">
+        {/* <span className="chip">
           <span className="w-1.5 h-1.5 rounded-full bg-[var(--color-warn)]" />
           Demo Environment — Simulated Data
-        </span>
-        <span className="chip">
+        </span> */}
+        {/* <span className="chip">
           <Radio className="w-3 h-3 text-[var(--color-safe)]" />
           Sim Time <span className="font-mono">{simTime}</span>
-        </span>
+        </span> */}
         <span className="chip">
           <ShieldCheck className="w-3 h-3 text-[var(--color-info)]" />
           Digital Twin:{" "}

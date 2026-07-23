@@ -366,8 +366,18 @@ export default function DigitalTwinMap() {
           cranes.map((c, i) => {
             const ip = ips.find((x) => x.id === c.immersion_point_id);
             if (!ip) return null;
-            const off = 0.0012 * ((i % 4) - 1.5);
-            const pos: LatLng = [ip.coordinates[0] + off, ip.coordinates[1] + off * 1.3];
+            
+            let angleBase = Math.PI / 2; // Default North
+            if (ip.id === "IP-03") angleBase = -Math.PI * 0.75; // South-West for IP-03
+            
+            const spread = ((i % 5) - 2) * 0.25; 
+            const angle = angleBase + spread;
+            const dist = 0.0012; 
+            
+            const pos: LatLng = [
+              ip.coordinates[0] + dist * Math.sin(angle), 
+              ip.coordinates[1] + dist * Math.cos(angle)
+            ];
             const bg =
               c.status === "FAULT"
                 ? "var(--color-critical)"
